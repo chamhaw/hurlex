@@ -24,8 +24,8 @@ class HurlRunConfigurationEditor(private val project: Project) : SettingsEditor<
 
     init {
         hurlFileField.addBrowseFolderListener(
-            "Select Hurl File", "Choose the .hurl file to run",
-            project, FileChooserDescriptorFactory.createSingleFileDescriptor("hurl")
+            "Select Hurl File or Directory", "Choose a .hurl file or directory to run",
+            project, FileChooserDescriptorFactory.createSingleLocalFileDescriptor()
         )
         workingDirField.addBrowseFolderListener(
             "Select Working Directory", "Choose the working directory",
@@ -67,7 +67,7 @@ class HurlRunConfigurationEditor(private val project: Project) : SettingsEditor<
 
     override fun createEditor(): JComponent {
         panel = FormBuilder.createFormBuilder()
-            .addLabeledComponent("Hurl file:", hurlFileField)
+            .addLabeledComponent("Hurl file/directory:", hurlFileField)
             .addLabeledComponent("Hurl executable:", hurlExecutableField)
             .addLabeledComponent("Additional options:", optionsField)
             .addLabeledComponent("Working directory:", workingDirField)

@@ -124,5 +124,11 @@
                 description="Create a new Hurl HTTP test file">
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
+        <action id="Hurl.RunDirectory"
+                class="com.github.chadw.intellijhurl.run.HurlDirectoryRunAction"
+                text="Run Hurl Files"
+                description="Run all Hurl files in this directory">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="RevealGroup"/>
+        </action>
     </actions>
 </idea-plugin>

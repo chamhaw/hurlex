@@ -21,7 +21,16 @@ class HurlRunConfigurationProducer : LazyRunConfigurationProducer<HurlRunConfigu
         configuration: HurlRunConfiguration,
         context: ConfigurationContext
     ): Boolean {
-        val file = context.psiLocation?.containingFile ?: return false
+        val location = context.psiLocation ?: return false
+
+        // 目录模式
+        val dir = location as? com.intellij.psi.PsiDirectory
+        if (dir != null) {
+            return configuration.hurlFilePath == dir.virtualFile.path
+        }
+
+        // 文件模式
+        val file = location.containingFile ?: return false
         if (file.fileType != HurlFileType) return false
         return configuration.hurlFilePath == file.virtualFile?.path
     }
@@ -31,12 +40,23 @@ class HurlRunConfigurationProducer : LazyRunConfigurationProducer<HurlRunConfigu
         context: ConfigurationContext,
         sourceElement: Ref<PsiElement>
     ): Boolean {
-        val file = context.psiLocation?.containingFile ?: return false
-        if (file.fileType != HurlFileType) return false
+        val location = context.psiLocation ?: return false
 
-        configuration.hurlFilePath = file.virtualFile?.path
-        configuration.name = file.name
-        configuration.workingDirectory = context.project.basePath
+        // 目录模式
+        val dir = location as? com.intellij.psi.PsiDirectory
+        if (dir != null) {
+            configuration.hurlFilePath = dir.virtualFile.path
+            configuration.name = dir.name
+            configuration.workingDirectory = context.project.basePath
+        } else {
+            // 文件模式
+            val file = location.containingFile ?: return false
+            if (file.fileType != HurlFileType) return false
+
+            configuration.hurlFilePath = file.virtualFile?.path
+            configuration.name = file.name
+            configuration.workingDirectory = context.project.basePath
+        }
 
         val defaultVarFile = HurlProjectSettings.getInstance(context.project).state.defaultVariablesFile
         if (defaultVarFile.isNotBlank()) {
