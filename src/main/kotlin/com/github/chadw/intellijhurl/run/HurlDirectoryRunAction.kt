@@ -9,6 +9,15 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.execution.configurations.ConfigurationTypeUtil
 import com.intellij.openapi.actionSystem.CommonDataKeys
 
+private fun HurlRunConfiguration.applyProjectDefaults(project: com.intellij.openapi.project.Project) {
+    val state = HurlProjectSettings.getInstance(project).state
+    if (state.defaultVariablesFile.isNotBlank()) variablesFile = state.defaultVariablesFile
+    if (state.defaultHurlExecutable.isNotBlank()) hurlExecutable = state.defaultHurlExecutable
+    testMode = state.defaultTestMode
+    verbose = state.defaultVerbose
+    veryVerbose = state.defaultVeryVerbose
+}
+
 class HurlDirectoryRunAction : AnAction("Run Hurl Files") {
 
     override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
@@ -31,11 +40,7 @@ class HurlDirectoryRunAction : AnAction("Run Hurl Files") {
 
         config.hurlFilePath = dir.path
         config.workingDirectory = project.basePath
-
-        val defaultVarFile = HurlProjectSettings.getInstance(project).state.defaultVariablesFile
-        if (defaultVarFile.isNotBlank()) {
-            config.variablesFile = defaultVarFile
-        }
+        config.applyProjectDefaults(project)
 
         val executor = DefaultRunExecutor.getRunExecutorInstance()
         ProgramRunnerUtil.executeConfiguration(settings, executor)

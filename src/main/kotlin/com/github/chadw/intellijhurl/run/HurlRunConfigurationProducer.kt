@@ -8,6 +8,15 @@ import com.intellij.execution.configurations.ConfigurationTypeUtil
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
 
+private fun HurlRunConfiguration.applyProjectDefaults(project: com.intellij.openapi.project.Project) {
+    val state = HurlProjectSettings.getInstance(project).state
+    if (state.defaultVariablesFile.isNotBlank()) variablesFile = state.defaultVariablesFile
+    if (state.defaultHurlExecutable.isNotBlank()) hurlExecutable = state.defaultHurlExecutable
+    testMode = state.defaultTestMode
+    verbose = state.defaultVerbose
+    veryVerbose = state.defaultVeryVerbose
+}
+
 class HurlRunConfigurationProducer : LazyRunConfigurationProducer<HurlRunConfiguration>() {
 
     private val cachedConfigurationFactory by lazy {
@@ -47,7 +56,6 @@ class HurlRunConfigurationProducer : LazyRunConfigurationProducer<HurlRunConfigu
         if (dir != null) {
             configuration.hurlFilePath = dir.virtualFile.path
             configuration.name = dir.name
-            configuration.workingDirectory = context.project.basePath
         } else {
             // 文件模式
             val file = location.containingFile ?: return false
@@ -55,14 +63,10 @@ class HurlRunConfigurationProducer : LazyRunConfigurationProducer<HurlRunConfigu
 
             configuration.hurlFilePath = file.virtualFile?.path
             configuration.name = file.name
-            configuration.workingDirectory = context.project.basePath
         }
 
-        val defaultVarFile = HurlProjectSettings.getInstance(context.project).state.defaultVariablesFile
-        if (defaultVarFile.isNotBlank()) {
-            configuration.variablesFile = defaultVarFile
-        }
-
+        configuration.workingDirectory = context.project.basePath
+        configuration.applyProjectDefaults(context.project)
         return true
     }
 }

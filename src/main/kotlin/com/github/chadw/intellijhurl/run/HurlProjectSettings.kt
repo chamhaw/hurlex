@@ -7,7 +7,13 @@ import com.intellij.openapi.project.Project
 @Service(Service.Level.PROJECT)
 class HurlProjectSettings : PersistentStateComponent<HurlProjectSettings.State> {
 
-    data class State(var defaultVariablesFile: String = "")
+    data class State(
+        var defaultVariablesFile: String = "",
+        var defaultHurlExecutable: String = "",
+        var defaultTestMode: Boolean = false,
+        var defaultVerbose: Boolean = false,
+        var defaultVeryVerbose: Boolean = false
+    )
 
     private var myState = State()
 
