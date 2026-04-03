@@ -99,6 +99,13 @@
         <liveTemplateContext
                 implementation="com.github.chadw.intellijhurl.template.HurlLiveTemplateContext"/>
 
+        <!-- Settings -->
+        <projectService serviceImplementation="com.github.chadw.intellijhurl.run.HurlProjectSettings"/>
+        <projectConfigurable parentId="tools"
+                             instance="com.github.chadw.intellijhurl.run.HurlProjectSettingsConfigurable"
+                             id="com.github.chadw.intellijhurl.settings"
+                             displayName="Hurl"/>
+
         <!-- Run -->
         <configurationType implementation="com.github.chadw.intellijhurl.run.HurlConfigurationType"/>
         <runConfigurationProducer implementation="com.github.chadw.intellijhurl.run.HurlRunConfigurationProducer"/>

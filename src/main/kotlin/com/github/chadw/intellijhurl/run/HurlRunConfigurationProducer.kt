@@ -4,14 +4,18 @@ import com.github.chadw.intellijhurl.language.HurlFileType
 import com.intellij.execution.actions.ConfigurationContext
 import com.intellij.execution.actions.LazyRunConfigurationProducer
 import com.intellij.execution.configurations.ConfigurationFactory
+import com.intellij.execution.configurations.ConfigurationTypeUtil
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
 
 class HurlRunConfigurationProducer : LazyRunConfigurationProducer<HurlRunConfiguration>() {
 
-    override fun getConfigurationFactory(): ConfigurationFactory {
-        return HurlConfigurationFactory(HurlConfigurationType())
+    private val cachedConfigurationFactory by lazy {
+        ConfigurationTypeUtil.findConfigurationType(HurlConfigurationType::class.java)
+            .configurationFactories.first()
     }
+
+    override fun getConfigurationFactory(): ConfigurationFactory = cachedConfigurationFactory
 
     override fun isConfigurationFromContext(
         configuration: HurlRunConfiguration,
@@ -33,6 +37,11 @@ class HurlRunConfigurationProducer : LazyRunConfigurationProducer<HurlRunConfigu
         configuration.hurlFilePath = file.virtualFile?.path
         configuration.name = file.name
         configuration.workingDirectory = context.project.basePath
+
+        val defaultVarFile = HurlProjectSettings.getInstance(context.project).state.defaultVariablesFile
+        if (defaultVarFile.isNotBlank()) {
+            configuration.variablesFile = defaultVarFile
+        }
 
         return true
     }
