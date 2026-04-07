@@ -97,7 +97,8 @@
         <internalFileTemplate name="Hurl File"/>
         <defaultLiveTemplates file="/liveTemplates/Hurl.xml"/>
         <liveTemplateContext
-                implementation="com.github.chadw.intellijhurl.template.HurlLiveTemplateContext"/>
+                implementation="com.github.chadw.intellijhurl.template.HurlLiveTemplateContext"
+                contextId="HURL"/>
 
         <!-- Settings -->
         <projectService serviceImplementation="com.github.chadw.intellijhurl.run.HurlProjectSettings"/>
