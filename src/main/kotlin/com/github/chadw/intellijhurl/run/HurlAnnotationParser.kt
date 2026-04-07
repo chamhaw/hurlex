@@ -29,10 +29,10 @@ object HurlAnnotationParser {
 
         for (line in lines) {
             val trimmed = line.trim()
-            val annotation = when (trimmed) {
-                "# @setup" -> SectionType.SETUP
-                "# @teardown" -> SectionType.TEARDOWN
-                "# @test" -> SectionType.TEST
+            val annotation = when {
+                trimmed.startsWith("# @setup") -> SectionType.SETUP
+                trimmed.startsWith("# @teardown") -> SectionType.TEARDOWN
+                trimmed.startsWith("# @test") -> SectionType.TEST
                 else -> null
             }
 
@@ -88,7 +88,7 @@ object HurlAnnotationParser {
     fun hasAnnotations(fileContent: String): Boolean {
         return fileContent.lines().any {
             val trimmed = it.trim()
-            trimmed == "# @setup" || trimmed == "# @teardown" || trimmed == "# @test"
+            trimmed.startsWith("# @setup") || trimmed.startsWith("# @teardown") || trimmed.startsWith("# @test")
         }
     }
 }
