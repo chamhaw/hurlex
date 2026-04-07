@@ -11,6 +11,7 @@ import com.intellij.openapi.util.io.FileUtil
 import com.google.gson.JsonParser
 import java.io.File
 import java.nio.file.Files
+import com.github.chadw.intellijhurl.run.HurlProjectSettings
 
 class HurlCommandLineState(
     private val configuration: HurlRunConfiguration,
@@ -32,6 +33,7 @@ class HurlCommandLineState(
 
     private fun startOriginalProcess(): ProcessHandler {
         val customPath = configuration.hurlExecutable?.takeIf { it.isNotBlank() }
+            ?: HurlProjectSettings.getInstance(environment.project).state.defaultHurlExecutable.takeIf { it.isNotBlank() }
         val location = HurlExecutableUtil.findHurl(customPath)
 
         val commandLine = buildBaseCommand(location)
@@ -56,6 +58,7 @@ class HurlCommandLineState(
     private fun startAnnotatedProcess(fileContent: String): ProcessHandler {
         val sections = HurlAnnotationParser.parse(fileContent)
         val customPath = configuration.hurlExecutable?.takeIf { it.isNotBlank() }
+            ?: HurlProjectSettings.getInstance(environment.project).state.defaultHurlExecutable.takeIf { it.isNotBlank() }
         val location = HurlExecutableUtil.findHurl(customPath)
 
         // Create a dummy process handler to write output to the console.
