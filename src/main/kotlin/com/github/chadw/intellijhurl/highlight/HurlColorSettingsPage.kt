@@ -36,6 +36,7 @@ class HurlColorSettingsPage : ColorSettingsPage {
             AttributesDescriptor("Multiline String", HurlSyntaxHighlighter.MULTILINE_STRING),
             AttributesDescriptor("JSON Body", HurlSyntaxHighlighter.JSON),
             AttributesDescriptor("Brace", HurlSyntaxHighlighter.BRACE),
+            AttributesDescriptor("Section Annotation (@setup/@teardown/@test)", HurlSyntaxHighlighter.SECTION_ANNOTATION),
         )
     }
 

@@ -5,9 +5,13 @@ import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.Annotator
 import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.elementType
 
 class HurlAnnotator : Annotator {
+
+    companion object {
+        private val SECTION_ANNOTATION_PATTERN = Regex("^#\\s*@(setup|teardown|test)\\s*$")
+    }
+
     override fun annotate(element: PsiElement, holder: AnnotationHolder) {
         val elementType = element.node?.elementType ?: return
 
@@ -21,6 +25,14 @@ class HurlAnnotator : Annotator {
                 holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
                     .textAttributes(HurlSyntaxHighlighter.URL)
                     .create()
+            }
+            HurlTokenTypes.COMMENT -> {
+                val text = element.text.trim()
+                if (SECTION_ANNOTATION_PATTERN.matches(text)) {
+                    holder.newSilentAnnotation(HighlightSeverity.INFORMATION)
+                        .textAttributes(HurlSyntaxHighlighter.SECTION_ANNOTATION)
+                        .create()
+                }
             }
         }
     }

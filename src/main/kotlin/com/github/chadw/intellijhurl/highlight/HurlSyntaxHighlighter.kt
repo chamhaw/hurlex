@@ -37,6 +37,7 @@ class HurlSyntaxHighlighter : SyntaxHighlighterBase() {
         val MULTILINE_STRING = createTextAttributesKey("HURL_MULTILINE_STRING", DefaultLanguageHighlighterColors.STRING)
         val JSON = createTextAttributesKey("HURL_JSON", DefaultLanguageHighlighterColors.STRING)
         val BRACE = createTextAttributesKey("HURL_BRACE", DefaultLanguageHighlighterColors.BRACES)
+        val SECTION_ANNOTATION = createTextAttributesKey("HURL_SECTION_ANNOTATION", DefaultLanguageHighlighterColors.METADATA)
         val BAD_CHARACTER = createTextAttributesKey("HURL_BAD_CHARACTER", HighlighterColors.BAD_CHARACTER)
 
         private val METHOD_KEYS = arrayOf(METHOD)

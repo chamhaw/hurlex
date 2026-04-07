@@ -24,4 +24,5 @@
     <option name="HURL_MULTILINE_STRING" baseAttributes="DEFAULT_STRING"/>
     <option name="HURL_JSON" baseAttributes="DEFAULT_STRING"/>
     <option name="HURL_BRACE" baseAttributes="DEFAULT_BRACES"/>
+    <option name="HURL_SECTION_ANNOTATION" baseAttributes="DEFAULT_METADATA"/>
 </list>
