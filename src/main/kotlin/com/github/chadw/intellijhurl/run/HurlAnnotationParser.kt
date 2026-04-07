@@ -9,6 +9,10 @@ enum class SectionType { SETUP, TEST, TEARDOWN }
 
 object HurlAnnotationParser {
 
+    private val SETUP_PATTERN = Regex("^#\\s*@setup(\\s.*)?$", RegexOption.IGNORE_CASE)
+    private val TEARDOWN_PATTERN = Regex("^#\\s*@teardown(\\s.*)?$", RegexOption.IGNORE_CASE)
+    private val TEST_PATTERN = Regex("^#\\s*@test(\\s.*)?$", RegexOption.IGNORE_CASE)
+
     /**
      * Parse a .hurl file content into sections based on `# @setup` / `# @teardown` annotations.
      *
@@ -30,9 +34,9 @@ object HurlAnnotationParser {
         for (line in lines) {
             val trimmed = line.trim()
             val annotation = when {
-                trimmed.startsWith("# @setup") -> SectionType.SETUP
-                trimmed.startsWith("# @teardown") -> SectionType.TEARDOWN
-                trimmed.startsWith("# @test") -> SectionType.TEST
+                SETUP_PATTERN.matches(trimmed) -> SectionType.SETUP
+                TEARDOWN_PATTERN.matches(trimmed) -> SectionType.TEARDOWN
+                TEST_PATTERN.matches(trimmed) -> SectionType.TEST
                 else -> null
             }
 
@@ -88,7 +92,7 @@ object HurlAnnotationParser {
     fun hasAnnotations(fileContent: String): Boolean {
         return fileContent.lines().any {
             val trimmed = it.trim()
-            trimmed.startsWith("# @setup") || trimmed.startsWith("# @teardown") || trimmed.startsWith("# @test")
+            SETUP_PATTERN.matches(trimmed) || TEARDOWN_PATTERN.matches(trimmed) || TEST_PATTERN.matches(trimmed)
         }
     }
 }
