@@ -157,8 +157,7 @@ class HurlCommandLineState(
             sb.appendLine("set -e")
             sb.appendLine("if [ \$SETUP_EXIT -ne 0 ]; then")
             sb.appendLine("  echo ''")
-            sb.appendLine("  echo \"[Setup] FAILED (exit code \$SETUP_EXIT), aborting execution.\"")
-            sb.appendLine("  exit \$SETUP_EXIT")
+            sb.appendLine("  echo \"[Setup] FAILED (exit code \$SETUP_EXIT), running teardown anyway...\"")
             sb.appendLine("fi")
             sb.appendLine()
         }
@@ -191,6 +190,10 @@ class HurlCommandLineState(
         // --- TEST ---
         if (testFile != null) {
             sb.appendLine("# === Test ===")
+            // Skip test if setup failed
+            if (setupFile != null) {
+                sb.appendLine("if [ \${SETUP_EXIT:-0} -eq 0 ]; then")
+            }
             sb.appendLine("echo ''")
             sb.appendLine("echo '[Test] Running...'")
             sb.appendLine("echo ''")
@@ -206,9 +209,13 @@ class HurlCommandLineState(
             sb.appendLine("$hurlCmd ${shellEscape(testFile.absolutePath)} $commonFlags --continue-on-error --report-json ${shellEscape(testReportDir.absolutePath)} \$SETUP_CAPTURES --color")
             sb.appendLine("TEST_EXIT=\$?")
             sb.appendLine("set -e")
+            if (setupFile != null) {
+                sb.appendLine("else")
+                sb.appendLine("  echo ''")
+                sb.appendLine("  echo '[Test] SKIPPED (setup failed)'")
+                sb.appendLine("fi")
+            }
             sb.appendLine()
-        } else {
-            sb.appendLine("TEST_EXIT=0")
         }
 
         // --- TEARDOWN ---
@@ -242,8 +249,9 @@ class HurlCommandLineState(
             sb.appendLine()
         }
 
-        // Final exit code = test exit code
-        sb.appendLine("exit \${TEST_EXIT:-0}")
+        // Final exit code: TEST_EXIT if set, else SETUP_EXIT if set, else 0
+        sb.appendLine("FINAL_EXIT=\${TEST_EXIT:-\${SETUP_EXIT:-0}}")
+        sb.appendLine("exit \$FINAL_EXIT")
         return sb.toString()
     }
 
