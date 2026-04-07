@@ -9,9 +9,9 @@ enum class SectionType { SETUP, TEST, TEARDOWN }
 
 object HurlAnnotationParser {
 
-    private val SETUP_PATTERN = Regex("^#\\s*@setup(\\s.*)?$", RegexOption.IGNORE_CASE)
-    private val TEARDOWN_PATTERN = Regex("^#\\s*@teardown(\\s.*)?$", RegexOption.IGNORE_CASE)
-    private val TEST_PATTERN = Regex("^#\\s*@test(\\s.*)?$", RegexOption.IGNORE_CASE)
+    private val SETUP_PATTERN = Regex("^#\\s*${HurlAnnotations.SETUP}(\\s.*)?$", RegexOption.IGNORE_CASE)
+    private val TEARDOWN_PATTERN = Regex("^#\\s*${HurlAnnotations.TEARDOWN}(\\s.*)?$", RegexOption.IGNORE_CASE)
+    private val TEST_PATTERN = Regex("^#\\s*${HurlAnnotations.TEST}(\\s.*)?$", RegexOption.IGNORE_CASE)
 
     /**
      * Parse a .hurl file content into sections based on `# @setup` / `# @teardown` annotations.
