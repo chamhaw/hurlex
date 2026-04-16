@@ -9,10 +9,7 @@ class HurlProjectSettings : PersistentStateComponent<HurlProjectSettings.State> 
 
     data class State(
         var defaultVariablesFile: String = "",
-        var defaultHurlExecutable: String = "",
-        var defaultTestMode: Boolean = false,
-        var defaultVerbose: Boolean = false,
-        var defaultVeryVerbose: Boolean = false
+        var defaultHurlExecutable: String = ""
     )
 
     private var myState = State()

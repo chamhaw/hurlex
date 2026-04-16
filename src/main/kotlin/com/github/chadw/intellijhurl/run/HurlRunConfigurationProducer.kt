@@ -11,10 +11,6 @@ import com.intellij.psi.PsiElement
 private fun HurlRunConfiguration.applyProjectDefaults(project: com.intellij.openapi.project.Project) {
     val state = HurlProjectSettings.getInstance(project).state
     if (state.defaultVariablesFile.isNotBlank()) variablesFile = state.defaultVariablesFile
-    if (state.defaultHurlExecutable.isNotBlank()) hurlExecutable = state.defaultHurlExecutable
-    testMode = state.defaultTestMode
-    verbose = state.defaultVerbose
-    veryVerbose = state.defaultVeryVerbose
 }
 
 class HurlRunConfigurationProducer : LazyRunConfigurationProducer<HurlRunConfiguration>() {

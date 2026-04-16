@@ -6,6 +6,7 @@ import com.intellij.execution.process.ProcessHandler
 import com.intellij.execution.process.ProcessHandlerFactory
 import com.intellij.execution.process.ProcessTerminatedListener
 import com.intellij.execution.runners.ExecutionEnvironment
+import com.github.chadw.intellijhurl.run.HurlProjectSettings
 
 class HurlCommandLineState(
     private val configuration: HurlRunConfiguration,
@@ -14,6 +15,7 @@ class HurlCommandLineState(
 
     override fun startProcess(): ProcessHandler {
         val customPath = configuration.hurlExecutable?.takeIf { it.isNotBlank() }
+            ?: HurlProjectSettings.getInstance(environment.project).state.defaultHurlExecutable.takeIf { it.isNotBlank() }
         val location = HurlExecutableUtil.findHurl(customPath)
 
         val commandLine: GeneralCommandLine
